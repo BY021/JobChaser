@@ -1,0 +1,687 @@
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  font-family: helvetica, sans-serif;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Navigation bar */
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: black;
+  color: white;
+  font-weight: 600;
+
+  .logo {
+    margin: 10px;
+    color: yellowgreen;
+    font-size: 2rem;
+  }
+
+  .logout-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+  }
+  
+  .logout-button:hover {
+    color: yellowgreen;
+  }
+
+  a {
+    text-decoration: none;
+    color: yellowgreen;
+  }
+    
+  a:hover {
+    color: white;
+  }
+
+  ul {
+    display: flex;
+    margin: 10px;
+    align-items: center;
+
+    li {
+      margin: 15px;
+      list-style: none;
+      text-transform: none;
+
+      a {
+        text-decoration: none;
+        color: white;
+      }
+      
+      a:hover {
+        color: yellowgreen;
+      }
+    }
+  }
+}
+
+/* Search bar landing page */
+
+.search-bar-container {
+  padding-top: 20vh;
+  width: 40%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px;
+}
+
+.input-wrapper {
+  width: 100%;
+  border-radius: 10px;
+  height: 2.5rem;
+  padding: 0 15px;
+  box-shadow: 0px 0px 8px #ddd;
+  display: flex;
+  align-items: center;
+  border: solid 2px yellowgreen;
+}
+
+.search-bar {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  font-size: 1.25rem;
+  width: 100%;
+  margin-left: 5px;
+}
+
+.search-bar:focus {
+  outline: none;
+}
+
+#search-icon {
+  color: yellowgreen;
+}
+
+.results-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 8px #ddd;
+  border-radius: 10px;
+  margin-top: 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+  border: solid 2px yellowgreen;
+}
+
+.results-list.no-input {
+  border: none;
+}
+
+.search-result {
+  padding: 10px 20px;
+
+  span {
+    color: yellowgreen;
+    font-weight: 500;
+  }
+}
+
+.search-no-result {
+  padding: 10px 20px;
+  color: yellowgreen;
+}
+
+.search-result:hover {
+background-color: #efefef;
+}
+
+/* Jobs page */
+.tabs-container {
+  border-bottom: 5px solid yellowgreen; /* Divider color */
+  background-color: #222;
+  display: flex;
+  justify-content: center;
+  color: yellowgreen;
+}
+
+/* Change the text color of the tabs */
+.MuiTab-root {
+  color: yellowgreen !important; /* Set the text color to yellowgreen */
+  text-transform: none !important; /* Disable text transformation */
+}
+
+/* Change the color of the active tab text */
+.MuiTab-root.Mui-selected {
+  color: white !important; /* Change the color of the active tab text */
+}
+
+/* Change the underline (indicator) color */
+.MuiTabs-root .MuiTabs-indicator {
+  background-color: yellowgreen !important; /* Change the indicator color to yellowgreen */
+  border-radius: 10px;
+}
+
+/* .status-msg {
+  display: flex;
+  justify-content: center;
+  margin:10px;
+  font-weight: 600;
+} */
+
+.status-msg {
+  background-color: #f5f5f5;
+  color: #424242;
+  border: 1px solid #e0e0e0;
+}
+
+
+.jobs {
+  display: flex;
+  flex-direction: column;
+  margin: 150px auto;
+  align-items: center;
+  color: yellowgreen;
+  
+  p {
+    margin: auto;
+    font-weight: 600;
+  }
+}
+
+.jobs-list {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content:flex-end;
+  flex-wrap: wrap;
+  margin: 15px;
+  justify-content: center;
+}
+
+.job-card {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 450px;
+  max-width: 450px;
+  height: 400px;
+  margin: 10px;
+  border: solid 2px yellowgreen;
+  background-color: transparent;
+  border-radius: 10px;
+  padding: 20px;
+  align-items: center;
+
+  img {
+    width: 100px;
+    height: auto;
+  }
+
+  .position {
+    margin-left: 15px;
+
+    span {
+      color: yellowgreen;
+      font-weight: 600;
+    }
+  }
+
+  .info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+
+
+    p {
+      background-color: #222;
+      padding: 10px;
+      border-radius: 10px;
+      margin: 5px;
+      color:white;
+      
+    }
+
+  }
+
+  button {
+    width: 100%;
+    margin: auto;
+    padding: 10px 40px;
+    background-color: transparent;
+    border-radius:8px;
+    border:solid 2px yellowgreen;
+  }
+}
+
+.spara-ej-knapp {
+  color: lightcoral;
+  font-weight: 600;
+}
+
+.job-card button:hover {
+  box-shadow: 0px 0px 4px black;
+  transition: 0.5s;
+}
+
+.job-card button:focus {
+  border:solid 2px black;
+}
+
+.job-card:hover {
+  box-shadow: 0px 0px 4px black;
+}
+
+.tabort-favorit  {
+  font-weight: 600;
+  color: lightcoral;
+}
+
+/* Sign Up and Sign in */
+
+.signup-signin {
+display: flex;
+flex-direction: column;
+gap: 15px;
+padding-top: 20vh;
+margin: auto;
+align-items: center;
+
+  input:focus {
+    border:solid 2px #222;
+    outline: none;
+  }
+}
+
+.signup-signin input{
+  border-radius: 10px;
+  height: 2.5rem;
+  padding: 0 15px;
+  border: solid 2px yellowgreen;
+  background-color: transparent;
+  margin: 20px;
+}
+
+.signup-signin input:hover {
+  box-shadow: 0px 0px 4px black;
+  transition: 0.5s;
+}
+
+.signup-signin button {
+  display: flex;
+  margin: 10px auto;
+  padding: 10px 40px;
+  background-color: transparent;
+  border-radius:8px;
+  border:solid 2px yellowgreen;
+}
+
+.signup-signin button:hover {
+  box-shadow: 0px 0px 4px black;
+  transition: 0.5s;
+}
+
+.signup-signin button:focus {
+  border:solid 2px black;
+}
+
+.message {
+  color: #222;
+  font-weight: 600;
+}
+
+/* .message {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+} */
+
+.message.error {
+  color: red;
+}
+
+/* Footer */
+
+footer {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 550;
+  background-color: black;
+  color: yellowgreen;
+}
+
+/* formen */
+
+/* Grundläggande formatering */
+.job-form-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: transparent;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a4a4a;
+  margin-bottom: 8px;
+}
+
+body.dark .form-label {
+  color: yellowgreen;
+}
+
+body.dark .job-form-container {
+  background-color: #222;
+}
+
+.form-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 12px;
+}
+
+/* .error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+} */
+
+/* .error-message, .redirect-message, .status-msg {
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.redirect-message {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+}
+
+.redirect-message a {
+  color: #0d47a1;
+  text-decoration: underline;
+} */
+
+
+
+/* .submit-btn {
+  padding: 12px;
+  background-color: #1d72b8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+} */
+
+.submit-btn {
+  width: 100%;
+  margin: auto;
+  padding: 10px 40px;
+  background-color: transparent;
+  border-radius:8px;
+  border:solid 2px yellowgreen;
+}
+
+body.dark .submit-btn {
+
+  color: white;
+
+}
+
+body.dark .submit-btn {
+  color:white;
+}
+
+body.dark .submit-btn:focus {
+  border:solid 2px white;
+
+}
+
+.submit-btn:hover {
+box-shadow: 0px 0px 4px black;
+transition: 0.5s;
+}
+
+.submit-btn:focus {
+border:solid 2px black;
+}
+
+.submit-btn:disabled {
+  background-color: #a1c4f5;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: lightgray;
+}
+
+body.dark .submit-btn:hover:not(:disabled) {
+  background-color: transparent;
+}
+
+.submit-error, .submit-success {
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.submit-error {
+  color: #f44336;
+}
+
+.submit-success {
+  color: #4caf50;
+}
+
+
+/* Webkits */
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
+  
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+}
+input[data-autocompleted] {
+    background-color: transparent !important;
+}
+
+/* Dark mode start */
+body.dark .tabs-container {
+  background-color: black;
+  border-bottom: 2px solid yellowgreen;
+}
+
+body.dark .status-msg {
+  color: yellowgreen;
+  background-color: transparent;
+  border: none;
+  font-weight: 500;
+  margin-top: 30px;
+}
+
+body.dark .signup-signin input:hover {
+  box-shadow: 0px 0px 8px #ddd;
+}
+
+body.dark .signup-signin button:hover {
+  box-shadow: 0px 0px 8px #ddd;
+}
+
+body.dark .signup-signin button:focus {
+  border:solid 2px white;
+}
+
+body.dark  .job-card button:hover {
+  box-shadow: 0px 0px 8px #ddd;
+}
+
+body.dark  .job-card:hover {
+  box-shadow: 0px 0px 8px #ddd;
+}
+
+body.dark .job-card button {
+  color:white;
+}
+
+body.dark .job-card button:focus {
+  border:solid 2px white;
+}
+
+body.dark ::placeholder {
+  color: white;
+}
+
+body.dark .signup-signin button {
+  color: white;
+}
+
+body.dark .signup-signin input {
+  color: white;
+}
+
+body.dark .signup-signin input:focus {
+  border:solid 2px white;
+  outline: none;
+}
+
+body.dark .message {
+  color: greenyellow;
+}
+
+body.dark .message.error {
+  color: red;
+}
+
+body.light {
+  background-color: white;
+  color: black;
+}
+
+body.dark {
+  background-color: #333;
+  color: white;  
+}
+
+body.dark nav {
+  background-color: #222;
+}
+
+body.dark footer {
+  background-color: #222; 
+  color: yellowgreen; 
+}
+
+body.dark .search-bar-container input {
+  color: white;
+}
+
+body.dark .search-result:hover {
+
+  background-color: #222;
+  }
+
+/* Dark Mode button */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #333;
+  transition: 0.4s;
+  border-radius: 34px;
+  border: solid 2px yellowgreen;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  left: 3px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: yellowgreen;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Dark mode button ends */

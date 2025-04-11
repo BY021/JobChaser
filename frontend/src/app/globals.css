@@ -153,36 +153,27 @@ background-color: #efefef;
 
 /* Jobs page */
 .tabs-container {
-  border-bottom: 5px solid yellowgreen; /* Divider color */
+  border-bottom: 5px solid yellowgreen;
   background-color: #222;
   display: flex;
   justify-content: center;
   color: yellowgreen;
 }
 
-/* Change the text color of the tabs */
 .MuiTab-root {
-  color: yellowgreen !important; /* Set the text color to yellowgreen */
-  text-transform: none !important; /* Disable text transformation */
+  color: yellowgreen !important; 
+  text-transform: none !important;
 }
 
-/* Change the color of the active tab text */
+
 .MuiTab-root.Mui-selected {
-  color: white !important; /* Change the color of the active tab text */
+  color: white !important; 
 }
 
-/* Change the underline (indicator) color */
 .MuiTabs-root .MuiTabs-indicator {
-  background-color: yellowgreen !important; /* Change the indicator color to yellowgreen */
+  background-color: yellowgreen !important;
   border-radius: 10px;
 }
-
-/* .status-msg {
-  display: flex;
-  justify-content: center;
-  margin:10px;
-  font-weight: 600;
-} */
 
 .status-msg {
   background-color: #f5f5f5;
@@ -344,12 +335,6 @@ align-items: center;
   font-weight: 600;
 }
 
-/* .message {
-  margin-top: 1rem;
-  padding: 0.5rem;
-  border-radius: 4px;
-} */
-
 .message.error {
   color: red;
 }
@@ -367,8 +352,6 @@ footer {
 }
 
 /* formen */
-
-/* Grundläggande formatering */
 .job-form-container {
   max-width: 600px;
   margin: 40px auto;
@@ -422,42 +405,6 @@ body.dark .job-form-container {
   font-size: 12px;
 }
 
-/* .error-message {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ef9a9a;
-} */
-
-/* .error-message, .redirect-message, .status-msg {
-  padding: 20px;
-  margin: 20px 0;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.redirect-message {
-  background-color: #e3f2fd;
-  color: #1565c0;
-  border: 1px solid #90caf9;
-}
-
-.redirect-message a {
-  color: #0d47a1;
-  text-decoration: underline;
-} */
-
-
-
-/* .submit-btn {
-  padding: 12px;
-  background-color: #1d72b8;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-} */
-
 .submit-btn {
   width: 100%;
   margin: auto;
@@ -468,9 +415,7 @@ body.dark .job-form-container {
 }
 
 body.dark .submit-btn {
-
   color: white;
-
 }
 
 body.dark .submit-btn {
@@ -479,7 +424,6 @@ body.dark .submit-btn {
 
 body.dark .submit-btn:focus {
   border:solid 2px white;
-
 }
 
 .submit-btn:hover {
@@ -518,7 +462,6 @@ body.dark .submit-btn:hover:not(:disabled) {
 
 
 /* Webkits */
-
 ::-webkit-scrollbar {
   width: 12px;
 }

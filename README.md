@@ -44,6 +44,8 @@ useEffect används för att hantera sidoeffekter i en komponent, såsom att häm
 **Vad är syftet kring den s.k dependency-arrayen i useEffect?**
 Den bestämmer när effekten ska köras. Om en variabel i arrayen ändras, körs effekten om.
 
+**Teoretiska frågor för vecka 3:**
+
 **Fördelar och nackdelar med Next.js?**
 
 **Fördelar:** SSR, SSG, automatisk routing, API-rutter, bildoptimering, snabb utveckling.
@@ -69,3 +71,9 @@ Den bestämmer när effekten ska köras. Om en variabel i arrayen ändras, körs
 **useContext:** Tillåter att dela globalt tillstånd utan att skicka props genom alla komponenter.
 
 **Problem det löser:** Prop drilling (skicka props genom många nivåer av komponenter).
+
+**Teoretiska frågor för vecka 4:**
+
+**Vad är Redux Toolkit?:** Redux Toolkit är det officiella verktyget från Redux-teamet för att förenkla användningen av Redux. Det minskar mängden kod och hjälper till att skriva ren, säker och effektiv state management i React-appar.
+
+**När, i vilka situationer vill man använda Redux Toolkit?:** Redux andvänds när appens state blir för stort eller komplext för att hanteras med enbart useState eller useContext. Etc är när man använder en komplex global state som delas mellan många komponenter, Vill centralisera API-anrop, när man behöver tydlig struktur.

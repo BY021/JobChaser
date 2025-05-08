@@ -13,7 +13,7 @@ export default function Login() {
 
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
-      const response = await fetch('http://localhost:3001/api/login', {
+      const response = await fetch('http://localhost:3001/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -25,8 +25,12 @@ export default function Login() {
       localStorage.setItem('token', token);
       window.location.href = '/jobb';
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        alert(error.message); // Visar "Fel E-post eller lösenord!" i en popup
+      } else {
+        alert('Ett okänt fel inträffade.');
     }
+   }
   };
 
   return (

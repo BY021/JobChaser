@@ -91,7 +91,7 @@ useEffect(() => {
 
     try {
       setLoading(prev => ({ ...prev, savedJobs: true }));
-      const savedJobsResponse = await fetch('http://localhost:3001/api/saved-jobs', {
+      const savedJobsResponse = await fetch('http://localhost:3001/api/user/saved-jobs', {
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -149,7 +149,7 @@ const handleSaveJob = async (jobId: number, isCurrentlySaved: boolean) => {
     const updatedJobsData = await updatedJobsResponse.json();
     setJobs(updatedJobsData);
 
-    const savedJobsResponse = await fetch('http://localhost:3001/api/saved-jobs', {
+    const savedJobsResponse = await fetch('http://localhost:3001/api/user/saved-jobs', {
       headers: { 
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

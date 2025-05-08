@@ -1,7 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { FaSearch } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { setSearchTerm, setJobs, setLoading, setError } from '../redux/jobSearchSlice';
+import { RootState } from '../redux/store';
+import { useEffect } from 'react';
 
 type Job = {
   id: number;
@@ -16,21 +19,20 @@ type Job = {
 };
 
 export default function Home() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch();
   const router = useRouter();
+  
+  const { searchTerm, jobs, loading, error } = useSelector((state: RootState) => state.jobSearch);
 
   useEffect(() => {
     const searchJobs = async () => {
       if (!searchTerm.trim()) {
-        setJobs([]);
+        dispatch(setJobs([]));
         return;
       }
 
-      setLoading(true);
-      setError(null);
+      dispatch(setLoading(true));
+      dispatch(setError(null));
       
       try {
         const response = await fetch(`http://localhost:3001/api/jobs?q=${encodeURIComponent(searchTerm)}`);
@@ -40,19 +42,23 @@ export default function Home() {
         }
 
         const data = await response.json();
-        setJobs(data);
+        dispatch(setJobs(data));
       } catch (err) {
         console.error('Search error:', err);
-        setError(err instanceof Error ? err.message : 'Ett fel uppstod');
-        setJobs([]);
+        dispatch(setError(err instanceof Error ? err.message : 'Ett fel uppstod'));
+        dispatch(setJobs([]));
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
     const timer = setTimeout(searchJobs, 300);
     return () => clearTimeout(timer);
-  }, [searchTerm]);
+  }, [searchTerm, dispatch]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchTerm(e.target.value));
+  };
 
   const noResults = !loading && searchTerm.trim() && jobs.length === 0;
 
@@ -65,7 +71,7 @@ export default function Home() {
           name="search-jobs"
           type="text"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchChange}
           placeholder="Sök jobb..."
         />
       </div>

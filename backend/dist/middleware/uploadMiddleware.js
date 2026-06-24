@@ -6,10 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.upload = void 0;
 const multer_1 = __importDefault(require("multer"));
 const fs_1 = __importDefault(require("fs"));
-if (!fs_1.default.existsSync('uploads')) {
-    fs_1.default.mkdirSync('uploads');
+const path_1 = __importDefault(require("path"));
+const uploadDir = path_1.default.join(__dirname, '../../uploads');
+if (!fs_1.default.existsSync(uploadDir)) {
+    fs_1.default.mkdirSync(uploadDir, { recursive: true });
 }
 exports.upload = (0, multer_1.default)({
-    dest: 'uploads/',
+    dest: uploadDir,
     limits: { fileSize: 5 * 1024 * 1024 }
 });

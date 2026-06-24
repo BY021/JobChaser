@@ -26,7 +26,7 @@ export default function Login() {
       router.push('/jobb'); 
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message); // Visar "Fel E-post eller lösenord!" i en popup
+        alert(error.message);
       } else {
         alert('Ett okänt fel inträffade.');
       }

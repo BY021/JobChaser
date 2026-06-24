@@ -8,25 +8,30 @@ const client_1 = require("@prisma/client");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const prisma = new client_1.PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET;
-// Hämta sparade jobb (exakt samma kod)
+// Hämta sparade jobb
 const getSavedJobs = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
-        if (!token)
-            return res.status(401).json({ error: 'Unauthorized' });
+        if (!token) {
+            res.status(401).json({ error: 'Unauthorized' });
+            return;
+        }
         try {
             const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
             const user = await prisma.user.findUnique({
                 where: { id: decoded.userId },
                 include: { savedJobs: true }
             });
-            if (!user)
-                return res.status(404).json({ error: 'User not found' });
+            if (!user) {
+                res.status(404).json({ error: 'User not found' });
+                return;
+            }
             res.json(user.savedJobs);
         }
         catch (jwtError) {
             if (jwtError instanceof jsonwebtoken_1.default.TokenExpiredError) {
-                return res.status(401).json({ error: 'Token expired' });
+                res.status(401).json({ error: 'Token expired' });
+                return;
             }
             throw jwtError;
         }
@@ -36,12 +41,14 @@ const getSavedJobs = async (req, res) => {
     }
 };
 exports.getSavedJobs = getSavedJobs;
-// Hämta användarinfo (exakt samma kod)
+// Hämta användarinfo
 const getUserInfo = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
-        if (!token)
-            return res.status(401).json({ error: 'Unauthorized' });
+        if (!token) {
+            res.status(401).json({ error: 'Unauthorized' });
+            return;
+        }
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
         const user = await prisma.user.findUnique({
             where: { id: decoded.userId },
@@ -51,13 +58,16 @@ const getUserInfo = async (req, res) => {
                 role: true
             }
         });
-        if (!user)
-            return res.status(404).json({ error: 'User not found' });
+        if (!user) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
         res.json(user);
     }
     catch (error) {
         if (error instanceof jsonwebtoken_1.default.TokenExpiredError) {
-            return res.status(401).json({ error: 'Token expired' });
+            res.status(401).json({ error: 'Token expired' });
+            return;
         }
         res.status(500).json({ error: 'Internal server error' });
     }

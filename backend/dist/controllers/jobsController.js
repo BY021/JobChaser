@@ -10,27 +10,67 @@ const fs_1 = __importDefault(require("fs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const prisma = new client_1.PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET;
-// Hämta alla jobb (exakt samma kod)
+// Hämta alla jobb (med sökning)
 const getAllJobs = async (req, res) => {
-    /* ... exakt samma kod som i din server.ts ... */
+    try {
+        const { q } = req.query;
+        const allJobs = await prisma.job.findMany({
+            include: {
+                savedBy: {
+                    select: { id: true }
+                }
+            },
+            orderBy: {
+                postedAt: 'desc'
+            }
+        });
+        // Om ingen sökterm finns, returnera alla jobb
+        if (!q) {
+            res.json(allJobs);
+            return;
+        }
+        // Filtrera jobb baserat på sökterm
+        const searchTerm = q.toString().toLowerCase();
+        const filteredJobs = allJobs.filter(job => {
+            const languages = job.languages ? JSON.parse(JSON.stringify(job.languages)) : [];
+            const tools = job.tools ? JSON.parse(JSON.stringify(job.tools)) : [];
+            return (job.company.toLowerCase().includes(searchTerm) ||
+                job.position.toLowerCase().includes(searchTerm) ||
+                job.role.toLowerCase().includes(searchTerm) ||
+                job.level.toLowerCase().includes(searchTerm) ||
+                job.location.toLowerCase().includes(searchTerm) ||
+                job.contract.toLowerCase().includes(searchTerm) ||
+                languages.some((lang) => lang.toLowerCase().includes(searchTerm)) ||
+                tools.some((tool) => tool.toLowerCase().includes(searchTerm)));
+        });
+        res.json(filteredJobs);
+    }
+    catch (error) {
+        console.error('Error fetching jobs:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };
 exports.getAllJobs = getAllJobs;
-// Skapa nytt jobb (exakt samma kod med decoded.userId)
+// Skapa nytt jobb
 const createJob = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
-        if (!token)
-            return res.status(401).json({ error: 'Authorization token missing' });
+        if (!token) {
+            res.status(401).json({ error: 'Authorization token missing' });
+            return;
+        }
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
         const user = await prisma.user.findUnique({ where: { id: decoded.userId } });
-        if (!user)
-            return res.status(403).json({ error: 'User not found' });
+        if (!user) {
+            res.status(403).json({ error: 'User not found' });
+            return;
+        }
         const { company, position, role, level, contract, location, languages = '', tools = '' } = req.body;
         let logoPath = '';
         if (req.file) {
             const fileExt = path_1.default.extname(req.file.originalname);
             const newFileName = `${req.file.filename}${fileExt}`;
-            const newPath = path_1.default.join('uploads', newFileName);
+            const newPath = path_1.default.join(__dirname, '../../uploads', newFileName);
             fs_1.default.renameSync(req.file.path, newPath);
             logoPath = `/uploads/${newFileName}`;
         }
@@ -47,7 +87,7 @@ const createJob = async (req, res) => {
                 languages: languages ? languages.split(',').map((l) => l.trim()) : [],
                 tools: tools ? tools.split(',').map((t) => t.trim()) : [],
                 createdBy: {
-                    connect: { id: decoded.userId } // Exakt som i din ursprungliga kod
+                    connect: { id: decoded.userId }
                 }
             }
         });
@@ -58,19 +98,21 @@ const createJob = async (req, res) => {
     }
 };
 exports.createJob = createJob;
-// Spara jobb (exakt samma kod med decoded.userId)
+// Spara jobb
 const saveJob = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
-        if (!token)
-            return res.status(401).json({ error: 'Unauthorized' });
+        if (!token) {
+            res.status(401).json({ error: 'Unauthorized' });
+            return;
+        }
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
         const jobId = parseInt(req.params.id);
         await prisma.job.update({
             where: { id: jobId },
             data: {
                 savedBy: {
-                    connect: { id: decoded.userId } // Exakt som i din ursprungliga kod
+                    connect: { id: decoded.userId }
                 }
             }
         });
@@ -81,19 +123,21 @@ const saveJob = async (req, res) => {
     }
 };
 exports.saveJob = saveJob;
-// Avspara jobb (exakt samma kod med decoded.userId)
+// Ta bort sparade jobb
 const unsaveJob = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
-        if (!token)
-            return res.status(401).json({ error: 'Unauthorized' });
+        if (!token) {
+            res.status(401).json({ error: 'Unauthorized' });
+            return;
+        }
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
         const jobId = parseInt(req.params.id);
         await prisma.job.update({
             where: { id: jobId },
             data: {
                 savedBy: {
-                    disconnect: { id: decoded.userId } // Exakt som i din ursprungliga kod
+                    disconnect: { id: decoded.userId }
                 }
             }
         });

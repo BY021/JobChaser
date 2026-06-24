@@ -6,6 +6,7 @@ import { useState } from 'react';
 type FormData = {
   email: string;
   password: string;
+  confirmPassword: string;
 };
 
 type ApiError = {
@@ -15,7 +16,7 @@ type ApiError = {
 };
 
 export default function Register() {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -94,8 +95,8 @@ export default function Register() {
             {...register('password', { 
               required: 'Password is required',
               minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters'
+                value: 8,
+                message: 'Lösenord måste vara minst 8 tecken'
               }
             })} 
             type="password" 
@@ -103,6 +104,20 @@ export default function Register() {
           />
           {errors.password && (
             <span style={{ color: 'red', fontSize: '0.8rem' }}>{errors.password.message}</span>
+          )}
+        </div>
+
+        <div>
+          <input 
+            {...register('confirmPassword', { 
+              required: 'Bekräfta lösenord krävs',
+              validate: (value) => value === watch('password') || 'Lösenorden matchar inte'
+            })} 
+            type="password" 
+            placeholder="Bekräfta lösenord" 
+          />
+          {errors.confirmPassword && (
+            <span style={{ color: 'red', fontSize: '0.8rem' }}>{errors.confirmPassword.message}</span>
           )}
         </div>
         

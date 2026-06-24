@@ -9,21 +9,28 @@ const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET;
 const authenticate = async (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token)
-        return res.status(401).json({ error: 'Authorization token missing' });
     try {
+        // Läs token från HttpOnly cookie istället för Authorization header
+        const token = req.cookies?.authToken;
+        if (!token) {
+            return res.status(401).json({ error: 'Autentisering krävs' });
+        }
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
         const user = await prisma.user.findUnique({ where: { id: decoded.userId } });
-        if (!user)
-            return res.status(403).json({ error: 'User not found' });
-        next(); // Exakt som i din ursprungliga kod (ingen req.user tilldelning)
+        if (!user) {
+            return res.status(403).json({ error: 'Användare hittades inte' });
+        }
+        // Lagra userId på request för senare bruk
+        req.userId = user.id;
+        next();
     }
     catch (error) {
         if (error instanceof jsonwebtoken_1.default.TokenExpiredError) {
-            return res.status(401).json({ error: 'Token expired' });
+            // Rensa cookie om token är utgången
+            res.clearCookie('authToken', { path: '/' });
+            return res.status(401).json({ error: 'Session utgången' });
         }
-        return res.status(401).json({ error: 'Invalid token' });
+        return res.status(401).json({ error: 'Ogiltig autentisering' });
     }
 };
 exports.authenticate = authenticate;

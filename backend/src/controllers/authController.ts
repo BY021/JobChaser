@@ -5,6 +5,10 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET as string;
+// Centralize session duration configuration
+const SESSION_TTL_HOURS = parseInt(process.env.SESSION_TTL_HOURS ?? '24', 10);
+const TOKEN_TTL = `${SESSION_TTL_HOURS}h`;
+const COOKIE_MAX_AGE_MS = SESSION_TTL_HOURS * 60 * 60 * 1000;
 
 export const register = async (req: Request, res: Response) => {
   const { email, password, confirmPassword } = req.body;
@@ -38,13 +42,13 @@ export const register = async (req: Request, res: Response) => {
     });
 
     // Logga in användaren direkt efter registrering
-    const token = jwt.sign({ userId: newUser.id }, SECRET_KEY, { expiresIn: '24h' });
+    const token = jwt.sign({ userId: newUser.id }, SECRET_KEY, { expiresIn: TOKEN_TTL });
     
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: COOKIE_MAX_AGE_MS,
       path: '/'
     });
 
@@ -84,14 +88,14 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '24h' });
+    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: TOKEN_TTL });
     
     // Sätt HttpOnly cookie istället för att skicka token i response body
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // HTTPS endast i produktion
       sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000, // 24 timmar
+      maxAge: COOKIE_MAX_AGE_MS, // Centralized session duration
       path: '/'
     });
 

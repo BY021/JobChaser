@@ -9,7 +9,8 @@ type FormData = {
 };
 
 type ApiError = {
-  message: string;
+  message?: string;
+  error?: string;
   errors?: Record<string, string[]>;
 };
 
@@ -31,8 +32,23 @@ export default function Register() {
       });
 
       if (!response.ok) {
-        const errorData: ApiError = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
+        const errorData: ApiError = await response.json().catch(() => ({} as ApiError));
+        const errorText = errorData.message
+          || (typeof (errorData as { error?: unknown }).error === 'string' ? errorData.error : '')
+          || '';
+        const duplicateEmail =
+          response.status === 409 ||
+          errorText.toLowerCase().includes('exists') ||
+          errorText.toLowerCase().includes('finns redan');
+
+        const message = duplicateEmail
+          ? 'Detta mejl finns redan registrerad.'
+          : errorData.errors?.email?.[0]
+            || errorText
+            || 'Registration failed';
+
+        setSubmitError(message);
+        return;
       }
       
       router.push('/logga-in');

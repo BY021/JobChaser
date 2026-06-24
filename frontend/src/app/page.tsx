@@ -6,18 +6,6 @@ import { setSearchTerm, setJobs, setLoading, setError } from '../redux/jobSearch
 import { RootState } from '../redux/store';
 import { useEffect } from 'react';
 
-type Job = {
-  id: number;
-  company: string;
-  position: string;
-  role: string;
-  level: string;
-  location: string;
-  contract: string;
-  languages: string[] | null;
-  tools: string[] | null;
-};
-
 export default function Home() {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -82,7 +70,7 @@ export default function Home() {
       <div className={`results-list ${!searchTerm.trim() ? "no-input" : ""}`}>
         {noResults ? ( 
           <div className="search-no-result">
-            Inga jobb hittade för "{searchTerm}"
+            Inga jobb hittade för "{searchTerm}";
           </div>
         ) : (
           jobs.map(job => (

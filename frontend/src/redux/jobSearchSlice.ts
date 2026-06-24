@@ -1,16 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-type Job = {
-    id: number;
-    company: string;
-    position: string;
-    role: string;
-    level: string;
-    location: string;
-    contract: string;
-    languages: string[] | null;
-    tools: string[] | null;
-  };
+import { Job } from '@/types';
   
   interface JobSearchState {
     searchTerm: string;
@@ -46,4 +35,5 @@ const jobSearchSlice = createSlice({
 });
 
 export const { setSearchTerm, setJobs, setLoading, setError } = jobSearchSlice.actions;
+export { jobSearchSlice };
 export default jobSearchSlice.reducer;

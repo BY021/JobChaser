@@ -9,7 +9,10 @@ const SECRET_KEY = process.env.JWT_SECRET as string;
 export const getSavedJobs = async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ error: 'Unauthorized' });
+    if (!token) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
 
     try {
       const decoded = jwt.verify(token, SECRET_KEY) as { userId: number };
@@ -18,12 +21,16 @@ export const getSavedJobs = async (req: Request, res: Response) => {
         include: { savedJobs: true }
       });
 
-      if (!user) return res.status(404).json({ error: 'User not found' });
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
 
       res.json(user.savedJobs);
     } catch (jwtError) {
       if (jwtError instanceof jwt.TokenExpiredError) {
-        return res.status(401).json({ error: 'Token expired' });
+        res.status(401).json({ error: 'Token expired' });
+        return;
       }
       throw jwtError;
     }
@@ -36,7 +43,10 @@ export const getSavedJobs = async (req: Request, res: Response) => {
 export const getUserInfo = async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ error: 'Unauthorized' });
+    if (!token) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
 
     const decoded = jwt.verify(token, SECRET_KEY) as { userId: number };
     const user = await prisma.user.findUnique({
@@ -48,12 +58,16 @@ export const getUserInfo = async (req: Request, res: Response) => {
       }
     });
 
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
     
     res.json(user);
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({ error: 'Token expired' });
+      res.status(401).json({ error: 'Token expired' });
+      return;
     }
     res.status(500).json({ error: 'Internal server error' });
   }

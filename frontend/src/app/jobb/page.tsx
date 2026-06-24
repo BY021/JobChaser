@@ -1,33 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { formatDistanceToNow } from 'date-fns';
 import CreateJobForm from '@/komponenter/SkapaJobb';
+import JobCard from '@/komponenter/JobCard';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-
-
-//Types
-type Job = {
-  savedBy: any;
-  id: number;
-  company: string;
-  logo: string;
-  position: string;
-  role: string;
-  level: string;
-  postedAt: string;
-  contract: string;
-  location: string;
-  languages: string[];
-  tools: string[];
-};
-
-type User = {
-  id: number;
-  email: string;
-  role: string;
-};
+import { Job, User } from '@/types';
 
 export default function Jobb() {
   const [activeTab, setActiveTab] = useState(0);
@@ -38,8 +16,8 @@ export default function Jobb() {
     savedJobs: false
 });
 
-  const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -129,9 +107,9 @@ const handleSaveJob = async (jobId: number, isCurrentlySaved: boolean) => {
       throw new Error('Please log in to save jobs');
     }
 
-    const endpoint = `http://localhost:3001/api/jobs/${jobId}/${isCurrentlySaved ? 'unsave' : 'save'}`;
+    const endpoint = `http://localhost:3001/api/jobs/${jobId}/save`;
     const response = await fetch(endpoint, {
-      method: 'POST',
+      method: isCurrentlySaved ? 'DELETE' : 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -168,6 +146,11 @@ const handleSaveJob = async (jobId: number, isCurrentlySaved: boolean) => {
 
   return (
     <div>
+      {error && (
+        <div className="status-msg">
+          <p>{error}</p>
+        </div>
+      )}
       <Box className="tabs-container">
     <Tabs value={activeTab} onChange={handleTabChange}>
       <Tab label="Alla Jobb" />
@@ -182,38 +165,18 @@ const handleSaveJob = async (jobId: number, isCurrentlySaved: boolean) => {
             <div className="status-msg"><p>Laddar alla jobb...</p></div>
           ) : (
             <div className="jobs-list">
-              {jobs.map(job => (
-                <div className="job-card" key={job.id}>
-                <img src={`http://localhost:3001${job.logo}`} alt={job.company} />
-                <div className="position">
-                  <h3>{job.position}</h3>
-                  <p><span>at</span> {job.company}</p>
-                </div>
-                <div className="info">
-                  <p>{formatDistanceToNow(new Date(job.postedAt), { addSuffix: true })}</p>
-                  <p>{job.contract}</p>
-                  <p>{job.location}</p>
-                  <p>{job.level}</p>
-                  <p>{job.role}</p>
-                  {job.languages.length > 0 && <p>{job.languages.join(", ")}</p>}
-                  {job.tools.length > 0 && <p>{job.tools.join(", ")}</p>}
-                </div>
-                
-                {user && (
-                  <button 
-                    onClick={() => {
-                      const isSaved = savedJobs.some(savedJob => savedJob.id === job.id);
-                      handleSaveJob(job.id, isSaved);
-                    }}
-                    className={savedJobs.some(savedJob => savedJob.id === job.id) ? "saved" : "unsaved"}
-                  >
-                    {savedJobs.some(savedJob => savedJob.id === job.id) 
-                      ? <span className="spara-ej-knapp">Ta bort från sparade jobb</span>
-                      : "Spara jobb"}
-                  </button>
-                )}
-              </div>
-              ))}
+              {jobs.map(job => {
+                const isSaved = savedJobs.some(savedJob => savedJob.id === job.id);
+                return (
+                  <JobCard
+                    key={job.id}
+                    job={job}
+                    isSaved={isSaved}
+                    canSave={!!user}
+                    onSaveClick={(jobId) => handleSaveJob(jobId, isSaved)}
+                  />
+                );
+              })}
             </div>
           )}
         </div>
@@ -232,28 +195,16 @@ const handleSaveJob = async (jobId: number, isCurrentlySaved: boolean) => {
     ) : (
       <div className="jobs-list">
         {savedJobs.map(job => (
-                <div className="job-card" key={job.id}>
-                  <img src={`http://localhost:3001${job.logo}`} alt={job.company} />
-                  <div className="position">
-                    <h3>{job.position}</h3>
-                    <p><span>at</span> {job.company}</p>
-                  </div>
-                  <div className="info">
-                    <p>{formatDistanceToNow(new Date(job.postedAt), { addSuffix: true })}</p>
-                    <p>{job.contract}</p>
-                    <p>{job.location}</p>
-                    <p>{job.level}</p>
-                    <p>{job.role}</p>
-                    {job.languages.length > 0 && <p>{job.languages.join(", ")}</p>}
-                    {job.tools.length > 0 && <p>{job.tools.join(", ")}</p>}
-                  </div>
-                  <button onClick={() => handleSaveJob(job.id, true)}>
-                    <span className="tabort-favorit">Ta Bort</span>
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <JobCard
+            key={job.id}
+            job={job}
+            isSaved={true}
+            canSave={false}
+            onSaveClick={(jobId) => handleSaveJob(jobId, true)}
+          />
+        ))}
+      </div>
+    )}
         </div>
       )}
 

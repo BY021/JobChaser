@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useForm, FieldValues, FieldErrors, SubmitHandler } from 'react-hook-form';
+import { useForm, FieldErrors, SubmitHandler } from 'react-hook-form';
 
 type JobFormData = {
   company: string;
@@ -75,7 +75,7 @@ export default function CreateJobForm() {
         throw new Error(errorText || 'Failed to create job');
       }
 
-      const result = await response.json();
+      await response.json();
       setSubmitSuccess(true);
       reset();
     } catch (error) {
